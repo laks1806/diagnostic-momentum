@@ -13,7 +13,7 @@ Using **Synthetic Hospital** (Park, Chen & Dettmers, Carnegie Mellon, 2026), a s
 | Written report (2 pages + references) | [`deliverables/Diagnostic_Momentum_Report.docx`](deliverables/Diagnostic_Momentum_Report.docx) ([PDF](deliverables/Diagnostic_Momentum_Report.pdf)) |
 | PowerPoint presentation (script in speaker notes) | [`deliverables/Diagnostic_Momentum_Slides.pptx`](deliverables/Diagnostic_Momentum_Slides.pptx) |
 | Video (≤ 5 min) | [`deliverables/CotivitiAssessmentVideo.mp4`](deliverables/CotivitiAssessmentVideo.mp4) |
-| Resume | `deliverables/` (see resume file) |
+| Resume | [`deliverables/Lakshita_Resume.pdf`](deliverables/Lakshita_Resume.pdf) |
 | Proof of concept | This repository: pipeline in [`src/`](src), demo app [`app.py`](app.py) |
 
 ## Key results (gpt-oss-120b, 50 patients, 500 model calls, US$1.15)
