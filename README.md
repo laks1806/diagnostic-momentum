@@ -68,7 +68,6 @@ To re-run the models, put `FIREWORKS_API_KEY` (and optionally `GEMINI_API_KEY`) 
 | `app.py` | Streamlit demo |
 | `data/` | Pilot patients and decoys, adjudication decisions |
 | `results/` | Raw model outputs (JSONL), summary tables, figures; `screening/` holds the model-selection tests |
-| `scripts/` | Builders for the Word report and PowerPoint deck |
 | `docs/` | HTML walkthrough and HTML version of the slides |
 
 ## Data, citation and tools
