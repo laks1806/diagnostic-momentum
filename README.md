@@ -11,7 +11,7 @@ Using **Synthetic Hospital** (Park, Chen & Dettmers, Carnegie Mellon, 2026), a s
 | Deliverable | File |
 |---|---|
 | Written report (2 pages + references) | [`deliverables/Diagnostic_Momentum_Report.docx`](deliverables/Diagnostic_Momentum_Report.docx) ([PDF](deliverables/Diagnostic_Momentum_Report.pdf)) |
-| PowerPoint presentation (script in speaker notes) | [`deliverables/Diagnostic_Momentum_Slides.pptx`](deliverables/Diagnostic_Momentum_Slides.pptx) |
+| PowerPoint presentation | [`deliverables/Diagnostic_Momentum_Slides.pptx`](deliverables/Diagnostic_Momentum_Slides.pptx) |
 | Video (≤ 5 min) | [`deliverables/CotivitiAssessmentVideo.mp4`](deliverables/CotivitiAssessmentVideo.mp4) |
 | Resume | [`deliverables/Lakshita_Resume.pdf`](deliverables/Lakshita_Resume.pdf) |
 | Proof of concept | This repository: pipeline in [`src/`](src), demo app [`app.py`](app.py) |
@@ -63,7 +63,7 @@ To re-run the models, put `FIREWORKS_API_KEY` (and optionally `GEMINI_API_KEY`) 
 
 | Path | Contents |
 |---|---|
-| `deliverables/` | Report, slides, video, video script, resume |
+| `deliverables/` | Report, slides, video, resume |
 | `src/` | Pipeline: loading, decoy selection, planting, model calls, scoring, adjudication, analysis |
 | `app.py` | Streamlit demo |
 | `data/` | Pilot patients and decoys, adjudication decisions |

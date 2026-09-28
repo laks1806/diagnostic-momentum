@@ -22,7 +22,12 @@ from pptx.util import Emu, Inches, Pt
 
 ROOT = Path(__file__).resolve().parent.parent
 AUTHOR = "Lakshita Singh"
-SCRIPT = json.loads((ROOT / "scripts" / "script_notes.json").read_text(encoding="utf-8"))
+import sys  # noqa: E402
+
+# Speaker notes are added only with --notes and a local scripts/script_notes.json (kept out of the repo).
+_notes = ROOT / "scripts" / "script_notes.json"
+SCRIPT = (json.loads(_notes.read_text(encoding="utf-8"))
+          if "--notes" in sys.argv and _notes.exists() else {})
 
 HEX = lambda h: RGBColor.from_string(h)  # noqa: E731
 BG, INK, MUTED, LINE = HEX("FFFFFF"), HEX("16232A"), HEX("56666D"), HEX("D3DBDA")
@@ -127,7 +132,8 @@ def new_slide(eyebrow: str, headline: str | None, n: int, notes_key: str, head_s
     if headline:
         text(s, LEFT, Inches(0.95), Inches(11.0), Inches(1.3), [headline], size=head_size, font=SERIF, bold=True,
              spacing=1.0)
-    s.notes_slide.notes_text_frame.text = SCRIPT[notes_key]
+    if notes_key in SCRIPT:
+        s.notes_slide.notes_text_frame.text = SCRIPT[notes_key]
     return s
 
 

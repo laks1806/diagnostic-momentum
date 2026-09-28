@@ -9,3 +9,6 @@ data/chart_neutral_sets.json
 
 # Office lock files
 ~$*
+
+# video script: kept locally, not published
+scripts/script_notes.json
