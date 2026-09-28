@@ -1,0 +1,708 @@
+[
+ {
+  "patient_id": 1697,
+  "gt_id": 7028,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1806,
+   "icd10": "O00.9",
+   "name": "Ruptured Ectopic Pregnancy",
+   "acuity": "acute",
+   "support_present": 2,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1708,
+  "gt_id": 7039,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 2708,
+   "icd10": "E28.2",
+   "name": "Polycystic ovary syndrome",
+   "acuity": "chronic",
+   "support_present": 3,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1709,
+  "gt_id": 7040,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 556,
+   "icd10": "K80.20",
+   "name": "Cholelithiasis",
+   "acuity": "chronic",
+   "support_present": 8,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1715,
+  "gt_id": 7046,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1546,
+   "icd10": "D69.3",
+   "name": "Idiopathic thrombocytopenic purpura",
+   "acuity": "chronic",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1736,
+  "gt_id": 7067,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1889,
+   "icd10": "F10.231",
+   "name": "Delirium tremens",
+   "acuity": "acute",
+   "support_present": 11,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1740,
+  "gt_id": 7071,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1484,
+   "icd10": "N10",
+   "name": "Acute pyelonephritis",
+   "acuity": "acute",
+   "support_present": 10,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1741,
+  "gt_id": 7072,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 2986,
+   "icd10": "D64.3",
+   "name": "Sideroblastic anemia",
+   "acuity": "chronic",
+   "support_present": 4,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1748,
+  "gt_id": 7079,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1113,
+   "icd10": "C56.9",
+   "name": "Malignant neoplasm of ovary",
+   "acuity": "chronic",
+   "support_present": 7,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1768,
+  "gt_id": 7099,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1616,
+   "icd10": "D61.9",
+   "name": "Pancytopenia",
+   "acuity": "acute",
+   "support_present": 5,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1771,
+  "gt_id": 7102,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 6470,
+   "icd10": "F34.1",
+   "name": "Persistent depressive disorder (Dysthymia)",
+   "acuity": "chronic",
+   "support_present": 7,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1785,
+  "gt_id": 7116,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1484,
+   "icd10": "N10",
+   "name": "Acute pyelonephritis",
+   "acuity": "acute",
+   "support_present": 9,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1792,
+  "gt_id": 7123,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 2633,
+   "icd10": "A54.24",
+   "name": "Gonococcal pharyngitis and pelvic inflammatory disease",
+   "acuity": "acute",
+   "support_present": 2,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1859,
+  "gt_id": 7190,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 1930,
+   "icd10": "F41.1",
+   "name": "Generalized Anxiety Disorder",
+   "acuity": "chronic",
+   "support_present": 2,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1889,
+  "gt_id": 7220,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 1020,
+   "icd10": "J44.1",
+   "name": "COPD exacerbation with acute hypercapnic respiratory failure without altered mental status",
+   "acuity": "acute_on_chronic",
+   "support_present": 8,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 1992,
+  "gt_id": 7323,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1287,
+   "icd10": "E66.01",
+   "name": "Morbid obesity",
+   "acuity": "chronic",
+   "support_present": 9,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2009,
+  "gt_id": 7340,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 524,
+   "icd10": "E11.9",
+   "name": "Type 2 diabetes mellitus",
+   "acuity": "chronic",
+   "support_present": 12,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2015,
+  "gt_id": 7346,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 665,
+   "icd10": "E78.5",
+   "name": "Hyperlipidemia",
+   "acuity": "chronic",
+   "support_present": 7,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2064,
+  "gt_id": 7395,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 3185,
+   "icd10": "J13",
+   "name": "Pneumococcal pneumonia",
+   "acuity": "acute",
+   "support_present": 10,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2083,
+  "gt_id": 7414,
+  "n_encounters": 6,
+  "decoy": {
+   "diagnosis_id": 3116,
+   "icd10": "I50.23",
+   "name": "Heart failure with reduced ejection fraction",
+   "acuity": "acute_on_chronic",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2185,
+  "gt_id": 7516,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1046,
+   "icd10": "I26.99",
+   "name": "Pulmonary embolism",
+   "acuity": "acute",
+   "support_present": 8,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2187,
+  "gt_id": 7518,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1851,
+   "icd10": "E05.91",
+   "name": "Thyroid Storm",
+   "acuity": "acute",
+   "support_present": 7,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2193,
+  "gt_id": 7524,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 3195,
+   "icd10": "J43.9",
+   "name": "Severe upper lobe predominant emphysema",
+   "acuity": "chronic",
+   "support_present": 4,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2207,
+  "gt_id": 7538,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 665,
+   "icd10": "E78.5",
+   "name": "Hyperlipidemia",
+   "acuity": "chronic",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2216,
+  "gt_id": 7547,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 3546,
+   "icd10": "A39.0",
+   "name": "Meningococcal meningitis",
+   "acuity": "acute",
+   "support_present": 9,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2220,
+  "gt_id": 7551,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 616,
+   "icd10": "I62.00",
+   "name": "Acute right-sided subdural hematoma with subfalcine herniation",
+   "acuity": "acute",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2239,
+  "gt_id": 7570,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1484,
+   "icd10": "N10",
+   "name": "Acute pyelonephritis",
+   "acuity": "acute",
+   "support_present": 8,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2245,
+  "gt_id": 7576,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 624,
+   "icd10": "I50.9",
+   "name": "Acute decompensated heart failure",
+   "acuity": "acute",
+   "support_present": 9,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2254,
+  "gt_id": 7585,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 624,
+   "icd10": "I50.9",
+   "name": "Acute decompensated heart failure",
+   "acuity": "acute",
+   "support_present": 10,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2262,
+  "gt_id": 7593,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 593,
+   "icd10": "N40.1",
+   "name": "Recurrent benign prostatic hyperplasia",
+   "acuity": "chronic",
+   "support_present": 4,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2318,
+  "gt_id": 7649,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 6971,
+   "icd10": "G21.19",
+   "name": "Drug-induced parkinsonism due to metoclopramide",
+   "acuity": "acute",
+   "support_present": 5,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2339,
+  "gt_id": 7670,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1526,
+   "icd10": "Q44.2",
+   "name": "Biliary atresia",
+   "acuity": "chronic",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2351,
+  "gt_id": 7682,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1528,
+   "icd10": "P59.9",
+   "name": "Physiologic neonatal jaundice",
+   "acuity": "acute",
+   "support_present": 8,
+   "natural_rules_out": [
+    "Direct bilirubin",
+    "Lethargy",
+    "Reticulocyte count"
+   ],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2361,
+  "gt_id": 7692,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1232,
+   "icd10": "P36.9",
+   "name": "Neonatal sepsis",
+   "acuity": "acute",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2367,
+  "gt_id": 7698,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 1609,
+   "icd10": "K90.0",
+   "name": "Celiac disease",
+   "acuity": "chronic",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2369,
+  "gt_id": 7700,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 2853,
+   "icd10": "F84.0",
+   "name": "Autism spectrum disorder",
+   "acuity": "chronic",
+   "support_present": 3,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2376,
+  "gt_id": 7707,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 4988,
+   "icd10": "P76.0",
+   "name": "Meconium plug syndrome",
+   "acuity": "acute",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2403,
+  "gt_id": 7734,
+  "n_encounters": 7,
+  "decoy": {
+   "diagnosis_id": 870,
+   "icd10": "D57.1",
+   "name": "Sickle cell anemia without crisis",
+   "acuity": "chronic",
+   "support_present": 2,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2557,
+  "gt_id": 7888,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 2073,
+   "icd10": "F32.9",
+   "name": "Major depressive disorder",
+   "acuity": "chronic",
+   "support_present": 4,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2560,
+  "gt_id": 7891,
+  "n_encounters": 6,
+  "decoy": {
+   "diagnosis_id": 1706,
+   "icd10": "E29.1",
+   "name": "Male hypogonadism (endocrine infertility)",
+   "acuity": "chronic",
+   "support_present": 3,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2618,
+  "gt_id": 7949,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 2993,
+   "icd10": "F25.0",
+   "name": "Schizoaffective disorder",
+   "acuity": "acute",
+   "support_present": 10,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2705,
+  "gt_id": 8036,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 524,
+   "icd10": "E11.9",
+   "name": "Type 2 diabetes mellitus",
+   "acuity": "chronic",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2712,
+  "gt_id": 8043,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1100,
+   "icd10": "E83.52",
+   "name": "Malignancy-associated hypercalcemia",
+   "acuity": "acute_on_chronic",
+   "support_present": 8,
+   "natural_rules_out": [
+    "Hydrochlorothiazide therapy"
+   ],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2737,
+  "gt_id": 8068,
+  "n_encounters": 7,
+  "decoy": {
+   "diagnosis_id": 1746,
+   "icd10": "N31.9",
+   "name": "Neurogenic bladder",
+   "acuity": "chronic",
+   "support_present": 3,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2738,
+  "gt_id": 8069,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 527,
+   "icd10": "E10.10",
+   "name": "Diabetic ketoacidosis",
+   "acuity": "acute",
+   "support_present": 3,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2751,
+  "gt_id": 8082,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1239,
+   "icd10": "E27.1",
+   "name": "Primary adrenal insufficiency",
+   "acuity": "chronic",
+   "support_present": 11,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2834,
+  "gt_id": 8165,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 2844,
+   "icd10": "G31.84",
+   "name": "Mild cognitive impairment",
+   "acuity": "chronic",
+   "support_present": 6,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2850,
+  "gt_id": 8181,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 1538,
+   "icd10": "C91.10",
+   "name": "Chronic lymphocytic leukemia",
+   "acuity": "chronic",
+   "support_present": 7,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2856,
+  "gt_id": 8187,
+  "n_encounters": 8,
+  "decoy": {
+   "diagnosis_id": 673,
+   "icd10": "M72.6",
+   "name": "Necrotizing fasciitis",
+   "acuity": "acute",
+   "support_present": 2,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2885,
+  "gt_id": 8216,
+  "n_encounters": 5,
+  "decoy": {
+   "diagnosis_id": 1808,
+   "icd10": "Q96.9",
+   "name": "Turner Syndrome (Genetic Evaluation)",
+   "acuity": "chronic",
+   "support_present": 3,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ },
+ {
+  "patient_id": 2886,
+  "gt_id": 8217,
+  "n_encounters": 6,
+  "decoy": {
+   "diagnosis_id": 1332,
+   "icd10": "E87.8",
+   "name": "Refeeding syndrome with severe hypophosphatemia",
+   "acuity": "acute",
+   "support_present": 5,
+   "natural_rules_out": [],
+   "mentioned_in_chart": false
+  }
+ }
+]

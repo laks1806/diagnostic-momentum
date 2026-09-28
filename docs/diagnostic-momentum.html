@@ -1,0 +1,421 @@
+<title>Diagnostic Momentum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+:root {
+  --bg: #F2F5F4;
+  --surface: #FFFFFF;
+  --ink: #16232A;
+  --muted: #56666D;
+  --line: #D3DBDA;
+  --accent: #1D5C74;
+  --accent-soft: #E3EEF2;
+  --plant-bg: #F8E08E;
+  --plant-ink: #4F3B00;
+  --plant-stroke: #B88A00;
+  --ok: #23714F;
+  --ok-soft: #DFF1E7;
+  --bad: #A8322A;
+  --bad-soft: #F8E1DE;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0E1618; --surface: #162125; --ink: #E3EBEB; --muted: #98A9AE; --line: #2A3A3F;
+    --accent: #7FC1D9; --accent-soft: #1B3038; --plant-bg: #5A480F; --plant-ink: #FBE7A1; --plant-stroke: #E2B53A;
+    --ok: #74D1A0; --ok-soft: #173427; --bad: #F2948A; --bad-soft: #3A1C1A;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0E1618; --surface: #162125; --ink: #E3EBEB; --muted: #98A9AE; --line: #2A3A3F;
+  --accent: #7FC1D9; --accent-soft: #1B3038; --plant-bg: #5A480F; --plant-ink: #FBE7A1; --plant-stroke: #E2B53A;
+  --ok: #74D1A0; --ok-soft: #173427; --bad: #F2948A; --bad-soft: #3A1C1A;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.6 var(--sans); padding: 0 20px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 40px 64px; display: grid; gap: 56px; }
+h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(34px, 5vw, 48px); letter-spacing: -0.01em; }
+h2 { font-size: 28px; }
+h3 { font-size: 19px; }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 500 12px/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.lede { font-size: 18px; color: var(--muted); max-width: 62ch; }
+.lede strong { color: var(--ink); font-weight: 600; }
+header { display: grid; gap: 14px; }
+section { display: grid; gap: 20px; }
+.section-head { display: grid; gap: 8px; }
+mark { background: var(--plant-bg); color: var(--plant-ink); padding: 0 3px; border-radius: 2px; }
+
+/* diagram */
+figure { margin: 0; display: grid; gap: 10px; }
+.diagram { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; overflow-x: auto; }
+.diagram svg { display: block; width: 100%; min-width: 640px; height: auto; color: var(--ink); }
+figcaption { color: var(--muted); font-size: 14px; max-width: 80ch; }
+.n-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
+.n-box.key { stroke: var(--accent); }
+.n-box.plant { stroke: var(--plant-stroke); stroke-width: 2; }
+.n-title { font: 600 15px var(--sans); fill: var(--ink); }
+.n-line { font: 400 12.5px var(--sans); fill: var(--muted); }
+.edge { stroke: var(--ink); stroke-width: 1.5; fill: none; }
+.edge.plant { stroke: var(--plant-stroke); stroke-width: 2; }
+.edge.key { stroke: var(--accent); stroke-dasharray: 5 4; }
+.e-label { font: 500 11.5px var(--sans); fill: var(--muted); }
+.e-label.plant { fill: var(--plant-stroke); }
+.e-label.key { fill: var(--accent); }
+.head-ink { fill: var(--ink); }
+.head-plant { fill: var(--plant-stroke); }
+.head-key { fill: var(--accent); }
+.step-no { font: 600 11px var(--mono); fill: var(--muted); }
+
+/* try it */
+.controls { display: grid; gap: 14px; }
+.control-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.control-label { font: 500 12px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); min-width: 120px; }
+.pill { font: 500 14px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+.pill:hover { border-color: var(--accent); }
+.pill[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.pill:focus-visible, button:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.version-note { background: var(--accent-soft); border-radius: 8px; padding: 12px 16px; display: grid; gap: 2px; }
+.version-note b { font-weight: 600; }
+.version-note span { color: var(--muted); }
+.toggle { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; color: var(--muted); cursor: pointer; }
+
+.tryit { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 860px) { .tryit { grid-template-columns: 1fr; } }
+
+.timeline { display: grid; gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+.visit { display: grid; grid-template-columns: 118px minmax(0, 1fr); gap: 16px; padding: 14px 18px; border-top: 1px solid var(--line); }
+.visit:first-child { border-top: 0; }
+.v-meta { display: grid; gap: 2px; align-content: start; }
+.v-date { font: 500 13px var(--mono); font-variant-numeric: tabular-nums; }
+.v-type { font: 500 11px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.v-body { display: grid; gap: 6px; min-width: 0; }
+.v-cc { font-size: 14px; }
+.plist { font: 400 12.5px/1.55 var(--mono); color: var(--muted); display: grid; gap: 1px; }
+.plist-h { color: var(--ink); font-weight: 500; }
+.plist div { overflow-wrap: anywhere; }
+.plist .planted { background: var(--plant-bg); color: var(--plant-ink); border-radius: 3px; padding: 0 4px; margin-inline: -4px; }
+.plist .empty { font-style: italic; }
+.v-note { font-size: 13.5px; border-left: 3px solid var(--plant-stroke); padding: 4px 0 4px 10px; }
+.v-note b { font: 500 11px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--plant-stroke); display: block; }
+.diag-tag { font: 500 11px var(--sans); color: var(--plant-stroke); letter-spacing: 0.04em; }
+@media (max-width: 520px) { .visit { grid-template-columns: 1fr; gap: 6px; } }
+
+.coder { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 14px; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); }
+.coder p { font-size: 14px; color: var(--muted); }
+.dx-list { display: grid; gap: 6px; }
+.dx { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; font-size: 14px; }
+.dx input { margin-top: 4px; accent-color: var(--accent); }
+.dx .verdict { display: block; font: 500 11px var(--sans); letter-spacing: 0.05em; text-transform: uppercase; margin-top: 2px; }
+.dx.is-true.revealed { background: var(--ok-soft); border-color: var(--ok); }
+.dx.is-true .verdict { color: var(--ok); }
+.dx.is-fake.revealed { background: var(--bad-soft); border-color: var(--bad); }
+.dx.is-fake .verdict { color: var(--bad); }
+.dx.is-hist .verdict { color: var(--muted); }
+.btn { font: 600 14px var(--sans); background: var(--accent); color: var(--bg); border: 0; border-radius: 8px; padding: 10px 16px; cursor: pointer; justify-self: start; }
+.btn.ghost { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.result { border-radius: 8px; padding: 12px 14px; font-size: 14px; display: grid; gap: 6px; }
+.result.good { background: var(--ok-soft); }
+.result.badr { background: var(--bad-soft); }
+.result.neutral { background: var(--accent-soft); }
+.result b { font-weight: 600; }
+.why { font-size: 13px; color: var(--muted); }
+
+/* measure + status */
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; min-width: 560px; font-size: 14px; }
+th, td { text-align: left; padding: 11px 16px; border-top: 1px solid var(--line); vertical-align: top; }
+th { font: 500 12px var(--sans); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); border-top: 0; }
+td:first-child { font-weight: 600; white-space: nowrap; }
+.status { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.steps li { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; align-items: baseline; font-size: 14.5px; }
+.chip { font: 500 11px var(--sans); letter-spacing: 0.05em; text-transform: uppercase; border-radius: 999px; padding: 2px 8px; text-align: center; }
+.chip.done { background: var(--ok-soft); color: var(--ok); }
+.chip.next { background: var(--plant-bg); color: var(--plant-ink); }
+.chip.todo { background: var(--accent-soft); color: var(--muted); }
+.costs { display: grid; gap: 8px; }
+.cost { display: flex; justify-content: space-between; gap: 12px; font-size: 14.5px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+.cost span:last-child { font: 500 14px var(--mono); font-variant-numeric: tabular-nums; }
+.cost.total { border-bottom: 0; font-weight: 600; }
+footer { color: var(--muted); font-size: 13px; }
+@media (prefers-reduced-motion: no-preference) { .dx, .pill { transition: background-color .15s, border-color .15s; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Cotiviti intern assessment · Topic 2 · Synthetic Hospital pilot</div>
+    <h1>Diagnostic Momentum</h1>
+    <p class="lede">When a wrong diagnosis is copied forward through a patient's problem lists, <strong>does an AI coder repeat it and bill for it?</strong> We plant one believable fake diagnosis per patient, in known places, and measure how often the AI falls for it.</p>
+  </header>
+
+  <section aria-labelledby="how">
+    <div class="section-head">
+      <div class="eyebrow">The pipeline</div>
+      <h2 id="how">How the experiment works</h2>
+    </div>
+    <figure>
+      <div class="diagram">
+        <svg viewBox="0 0 900 400" role="img" aria-label="Pipeline: Synthetic Hospital patients go to fake-diagnosis selection, then planting into problem lists, then the AI coder, then the scorer, then results. The answer key and the identity of the fake go straight to the scorer and never reach the AI.">
+          <defs>
+            <marker id="h-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-ink" d="M0,0 L10,5 L0,10 z"/></marker>
+            <marker id="h-plant" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-plant" d="M0,0 L10,5 L0,10 z"/></marker>
+            <marker id="h-key" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="head-key" d="M0,0 L10,5 L0,10 z"/></marker>
+          </defs>
+
+          <!-- row 1 -->
+          <rect class="n-box key" x="20" y="30" width="220" height="120" rx="8"/>
+          <text class="step-no" x="36" y="52">1</text>
+          <text class="n-title" x="36" y="74">Synthetic Hospital</text>
+          <text class="n-line" x="36" y="98">1,268 patients · 5,602 visits</text>
+          <text class="n-line" x="36" y="118">Knowledge graph of findings</text>
+          <text class="n-line" x="36" y="138">Answer key: true diagnoses</text>
+
+          <rect class="n-box plant" x="340" y="30" width="220" height="120" rx="8"/>
+          <text class="step-no" x="356" y="52">2</text>
+          <text class="n-title" x="356" y="74">Pick a fake diagnosis</text>
+          <text class="n-line" x="356" y="98">A tempting wrong exam answer</text>
+          <text class="n-line" x="356" y="118">≥ 2 matching findings in chart</text>
+          <text class="n-line" x="356" y="138">Fits the patient's age and sex</text>
+
+          <rect class="n-box plant" x="660" y="30" width="220" height="120" rx="8"/>
+          <text class="step-no" x="676" y="52">3</text>
+          <text class="n-title" x="676" y="74">Plant it</text>
+          <text class="n-line" x="676" y="98">Copy into problem lists</text>
+          <text class="n-line" x="676" y="118">5 versions of each chart</text>
+          <text class="n-line" x="676" y="138">Optional "ruled out" note</text>
+
+          <line class="edge" x1="240" y1="90" x2="336" y2="90" marker-end="url(#h-ink)"/>
+          <text class="e-label" x="290" y="80" text-anchor="middle">50 patients</text>
+          <line class="edge plant" x1="560" y1="90" x2="656" y2="90" marker-end="url(#h-plant)"/>
+          <text class="e-label plant" x="610" y="80" text-anchor="middle">1 fake each</text>
+
+          <!-- down from Plant to AI coder -->
+          <line class="edge" x1="770" y1="150" x2="770" y2="256" marker-end="url(#h-ink)"/>
+          <text class="e-label" x="782" y="208">250 charts</text>
+
+          <!-- answer key bypass -->
+          <polyline class="edge key" points="130,150 130,205 420,205 420,256" marker-end="url(#h-key)"/>
+          <text class="e-label key" x="275" y="197" text-anchor="middle">answer key</text>
+          <!-- fake identity bypass -->
+          <line class="edge plant" x1="500" y1="150" x2="500" y2="256" stroke-dasharray="5 4" marker-end="url(#h-plant)"/>
+          <text class="e-label plant" x="510" y="197">which one is fake</text>
+
+          <!-- row 2 -->
+          <rect class="n-box" x="660" y="260" width="220" height="120" rx="8"/>
+          <text class="step-no" x="676" y="282">4</text>
+          <text class="n-title" x="676" y="304">AI coder</text>
+          <text class="n-line" x="676" y="328">Reads the whole chart</text>
+          <text class="n-line" x="676" y="348">S1: the paper's prompt</text>
+          <text class="n-line" x="676" y="368">S2: + "lists may be wrong"</text>
+
+          <rect class="n-box" x="340" y="260" width="220" height="120" rx="8"/>
+          <text class="step-no" x="356" y="282">5</text>
+          <text class="n-title" x="356" y="304">Scorer</text>
+          <text class="n-line" x="356" y="328">Official F1 vs answer key</text>
+          <text class="n-line" x="356" y="348">Did the fake show up?</text>
+          <text class="n-line" x="356" y="368">Exact code or same category</text>
+
+          <rect class="n-box" x="20" y="260" width="220" height="120" rx="8"/>
+          <text class="step-no" x="36" y="282">6</text>
+          <text class="n-title" x="36" y="304">Results</text>
+          <text class="n-line" x="36" y="328">Propagation rate</text>
+          <text class="n-line" x="36" y="348">by copies and "ruled out"</text>
+          <text class="n-line" x="36" y="368">S1 vs S2, two models</text>
+
+          <line class="edge" x1="660" y1="320" x2="564" y2="320" marker-end="url(#h-ink)"/>
+          <text class="e-label" x="610" y="310" text-anchor="middle">billing codes</text>
+          <line class="edge" x1="340" y1="320" x2="244" y2="320" marker-end="url(#h-ink)"/>
+          <text class="e-label" x="290" y="310" text-anchor="middle">scores</text>
+        </svg>
+      </div>
+      <figcaption>The AI coder only ever sees the chart. The answer key (blue, dashed) and the identity of the planted fake (yellow, dashed) go straight to the scorer, so we can check every answer without the AI knowing it is being tested.</figcaption>
+    </figure>
+  </section>
+
+  <section aria-labelledby="try">
+    <div class="section-head">
+      <div class="eyebrow">Hands on</div>
+      <h2 id="try">Try it on a real pilot patient</h2>
+      <p>These are three of the 50 pilot patients, with their actual problem lists. Pick a chart version to see what gets planted, then play the AI coder: decide what you would bill, and check your answer.</p>
+    </div>
+
+    <div class="controls">
+      <div class="control-row" role="group" aria-label="Patient">
+        <span class="control-label">Patient</span>
+        <span id="patients" class="control-row"></span>
+      </div>
+      <div class="control-row" role="group" aria-label="Chart version">
+        <span class="control-label">Chart version</span>
+        <span id="versions" class="control-row"></span>
+      </div>
+      <div class="version-note" id="version-note" aria-live="polite"></div>
+      <label class="toggle"><input type="checkbox" id="hide-plant"> Test myself: hide the yellow highlight</label>
+    </div>
+
+    <div class="tryit">
+      <div class="timeline" id="timeline" aria-label="Visits, oldest first"></div>
+      <aside class="coder" aria-labelledby="coder-h">
+        <h3 id="coder-h">You are the AI coder</h3>
+        <p>Every diagnosis that appears in this chart's problem lists is below. Tick the ones you would bill for this patient.</p>
+        <div class="dx-list" id="dx-list"></div>
+        <div class="btn-row">
+          <button class="btn" id="check" type="button">Check my coding</button>
+          <button class="btn ghost" id="reset" type="button">Reset</button>
+        </div>
+        <div id="result" aria-live="polite"></div>
+      </aside>
+    </div>
+  </section>
+
+  <section aria-labelledby="measure">
+    <div class="section-head">
+      <div class="eyebrow">What each version tests</div>
+      <h2 id="measure">Five versions, five questions</h2>
+      <p>Every patient is tested in all five versions, so each patient is compared with themselves. The only thing that changes is where the fake diagnosis appears.</p>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Version</th><th>What changes in the chart</th><th>Question it answers</th></tr></thead>
+        <tbody id="measure-rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="status">
+    <div class="section-head">
+      <div class="eyebrow">Progress</div>
+      <h2 id="status">Where the project stands</h2>
+    </div>
+    <div class="status">
+      <ol class="steps">
+        <li><span class="chip done">Done</span><span>Dataset mapped, feasibility checked (80 eligible patients)</span></li>
+        <li><span class="chip done">Done</span><span>50 patients picked, fake diagnoses checked for plausibility</span></li>
+        <li><span class="chip done">Done</span><span>All chart versions generated automatically</span></li>
+        <li><span class="chip done">Done</span><span>Official scorer running locally</span></li>
+        <li><span class="chip next">Next</span><span>30-call check run to measure real token use</span></li>
+        <li><span class="chip todo">To do</span><span>Full run, charts and statistics</span></li>
+        <li><span class="chip todo">To do</span><span>Demo app, report, slides, video</span></li>
+      </ol>
+      <div class="costs">
+        <h3>Budget (Fireworks, estimated)</h3>
+        <div class="cost"><span>Check run · 30 calls</span><span>$0.03</span></div>
+        <div class="cost"><span>gpt-oss-120b · 500 calls</span><span>$1.20</span></div>
+        <div class="cost"><span>Nemotron Lightning · 500 calls</span><span>$0.40</span></div>
+        <div class="cost total"><span>Total, with a hard $2 stop</span><span>$1.63</span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>No AI results yet: the model runs haven't started. Patient data is synthetic, from Synthetic Hospital v1.3 (Park, Chen &amp; Dettmers, 2026).</footer>
+</div>
+
+<script type="application/json" id="data">[{"id": 2009, "age": 50, "sex": "M", "visits": [{"date": "2020-01-15", "type": "outpatient", "dept": "Internal Medicine", "cc": "presents to the clinic for a routine check-up. He has no complaints."}, {"date": "2020-07-15", "type": "outpatient", "dept": "Internal Medicine", "cc": "presents to the clinic for a routine health examination. He has no complaints and feels generally well."}, {"date": "2021-07-15", "type": "outpatient", "dept": "Internal Medicine", "cc": "presents to the clinic for a routine check-up. He has no complaints and has been adhering to his medication regimen."}, {"date": "2023-01-15", "type": "outpatient", "dept": "Internal Medicine", "cc": "presents to the clinic for a routine check-up. He has no complaints."}, {"date": "2025-01-15", "type": "outpatient", "dept": "Internal Medicine", "cc": "presents to the clinic for a routine check-up. He has no complaints but mentions that several of his friends have recently been diagnosed with lung cancer, which has made him anxious about his own health."}], "truth": [{"code": "E66.3", "name": "Obesity"}, {"code": "E78.5", "name": "Hyperlipidemia"}, {"code": "C34.90", "name": "Suspected malignant neoplasm of lung"}], "decoy": {"code": "E11.9", "name": "Type 2 diabetes mellitus", "support": ["Asymptomatic", "Blood pressure", "Body mass index", "Diastolic blood pressure", "Fasting plasma glucose"]}, "versions": {"clean": {"visits": [{"problems": [{"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}, {"t": "Obesity", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}], "diagnosed_visit": null}, "d1_late_nocontra": {"visits": [{"problems": [{"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}, {"t": "Obesity", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2023-01-15)", "planted": true}, {"t": "Hypertension", "planted": false}], "note": null}], "diagnosed_visit": 3}, "d3_late_nocontra": {"visits": [{"problems": [{"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}, {"t": "Obesity", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-07-15)", "planted": true}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-07-15)", "planted": true}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-07-15)", "planted": true}, {"t": "Hypertension", "planted": false}], "note": null}], "diagnosed_visit": 1}, "d3_late_contra": {"visits": [{"problems": [{"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}, {"t": "Obesity", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-07-15)", "planted": true}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-07-15)", "planted": true}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-07-15)", "planted": true}, {"t": "Hypertension", "planted": false}], "note": "Of note, type 2 diabetes mellitus was considered earlier but has since been ruled out on further workup."}], "diagnosed_visit": 1}, "d3_early_nocontra": {"visits": [{"problems": [{"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}, {"t": "Obesity", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-01-15)", "planted": true}, {"t": "Hypertension", "planted": false}, {"t": "Hyperlipidemia", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-01-15)", "planted": true}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Type 2 diabetes mellitus (diagnosed 2020-01-15)", "planted": true}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}, {"problems": [{"t": "Obesity (diagnosed 2020-01-15)", "planted": false}, {"t": "Hyperlipidemia (diagnosed 2020-07-15)", "planted": false}, {"t": "Hypertension", "planted": false}], "note": null}], "diagnosed_visit": 0}}}, {"id": 2185, "age": 68, "sex": "M", "visits": [{"date": "2020-01-15", "type": "outpatient", "dept": "Gastroenterology", "cc": "Six-month history of fatigue, shortness of breath on exertion, and 10-pound unintentional weight loss."}, {"date": "2020-02-15", "type": "inpatient", "dept": "General Surgery", "cc": "Admitted for elective right hemicolectomy; postoperative day 1 with surgical site pain and reluctance to deep breathe or cough."}, {"date": "2020-02-15", "type": "ed", "dept": "Emergency Medicine", "cc": "Fever of 38.5°C and chills approximately 4 hours after undergoing right hemicolectomy with intraoperative transfusion of packed red blood cells."}, {"date": "2020-02-15", "type": "ed", "dept": "Emergency Medicine", "cc": "Increasing shortness of breath and productive cough with white sputum on postoperative day 3 after right hemicolectomy."}, {"date": "2020-07-15", "type": "icu", "dept": "General Surgery", "cc": "Unresponsive with shallow, infrequent breathing two hours after elective laparoscopic cholecystectomy."}, {"date": "2021-01-15", "type": "inpatient", "dept": "General Surgery", "cc": "Difficulty breathing and mild chest discomfort on postoperative day 1 following elective open cholecystectomy."}, {"date": "2021-01-15", "type": "ed", "dept": "Emergency Medicine", "cc": "Difficulty breathing and mild chest pain on postoperative day 2 after open cholecystectomy, reluctant to move due to pain."}, {"date": "2023-01-15", "type": "ed", "dept": "Emergency Medicine", "cc": "Found unresponsive at home after one week of increasing lethargy and progressive difficulty breathing."}], "truth": [{"code": "T80.82XA", "name": "Transfusion-related acute lung injury"}, {"code": "T40.2X5A", "name": "Opioid-induced respiratory depression"}, {"code": "J96.22", "name": "Hypercapnic respiratory failure"}, {"code": "C18.2", "name": "Right-sided colon cancer"}, {"code": "J98.11", "name": "Post-obstructive atelectasis"}], "decoy": {"code": "I26.99", "name": "Pulmonary embolism", "support": ["Clear breath sounds", "Decreased breath sounds", "Dyspnea", "Hypoxemia", "Hypoxemia"]}, "versions": {"clean": {"visits": [{"problems": [{"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}], "diagnosed_visit": null}, "d1_late_nocontra": {"visits": [{"problems": [{"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2021-01-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}], "diagnosed_visit": 6}, "d3_late_nocontra": {"visits": [{"problems": [{"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-07-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-07-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-07-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}], "diagnosed_visit": 4}, "d3_late_contra": {"visits": [{"problems": [{"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-07-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-07-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-07-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": "Of note, pulmonary embolism was considered earlier but has since been ruled out on further workup."}], "diagnosed_visit": 4}, "d3_early_nocontra": {"visits": [{"problems": [{"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-01-15)", "planted": true}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-01-15)", "planted": true}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Pulmonary embolism (diagnosed 2020-01-15)", "planted": true}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}, {"problems": [{"t": "Right-sided colon cancer (diagnosed 2020-01-15)", "planted": false}, {"t": "Post-obstructive atelectasis (diagnosed 2020-02-15)", "planted": false}, {"t": "Transfusion-related acute lung injury (diagnosed 2020-02-15)", "planted": false}, {"t": "Opioid-induced respiratory depression (diagnosed 2020-07-15)", "planted": false}, {"t": "Chronic obstructive pulmonary disease (COPD)", "planted": false}, {"t": "Hypertension", "planted": false}, {"t": "Type 2 diabetes mellitus", "planted": false}, {"t": "Right-sided colon cancer (adenocarcinoma)", "planted": false}], "note": null}], "diagnosed_visit": 0}}}, {"id": 1740, "age": 30, "sex": "F", "visits": [{"date": "2020-01-15", "type": "outpatient", "dept": "Neurology", "cc": "Intermittent numbness and tingling in left arm and leg, and episodes of blurred vision in right eye that resolve spontaneously."}, {"date": "2021-01-15", "type": "outpatient", "dept": "Neurology", "cc": "Blurred vision in left eye and electric shock sensation radiating down spine when bending neck forward."}, {"date": "2021-07-15", "type": "outpatient", "dept": "Neurology", "cc": "Several weeks of worsening right eye pain and blurry vision with color desaturation."}, {"date": "2022-01-15", "type": "outpatient", "dept": "Urology", "cc": "Episodes of sudden urinary leakage and urgency that have become more noticeable, causing hesitation to leave home."}, {"date": "2022-04-15", "type": "outpatient", "dept": "Internal Medicine", "cc": "Fever, chills, and dysuria with increased urinary frequency over the past week."}, {"date": "2022-07-15", "type": "ed", "dept": "Emergency Medicine", "cc": "Intermittent visual blurring in right eye, involuntary muscle spasms of left hand, and urinary urgency with frequency."}, {"date": "2023-01-15", "type": "ed", "dept": "Emergency Medicine", "cc": "Sudden onset right leg weakness and numbness, with blurred vision in left eye that started one week ago."}, {"date": "2023-07-15", "type": "ed", "dept": "Emergency Medicine", "cc": "Progressive weakness in both legs with difficulty walking, numbness below navel, and urinary retention since morning."}], "truth": [{"code": "N30.00", "name": "Uncomplicated cystitis"}, {"code": "H46.9", "name": "Right optic neuropathy"}, {"code": "G35", "name": "Multiple sclerosis"}, {"code": "N39.41", "name": "Urinary incontinence"}], "decoy": {"code": "N10", "name": "Acute pyelonephritis", "support": ["Bacteriuria", "Chills", "Dysuria", "Fever", "Leukocyte esterase positive"]}, "versions": {"clean": {"visits": [{"problems": [{"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}], "diagnosed_visit": null}, "d1_late_nocontra": {"visits": [{"problems": [{"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2023-01-15)", "planted": true}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}], "diagnosed_visit": 6}, "d3_late_nocontra": {"visits": [{"problems": [{"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2022-04-15)", "planted": true}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2022-04-15)", "planted": true}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2022-04-15)", "planted": true}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}], "diagnosed_visit": 4}, "d3_late_contra": {"visits": [{"problems": [{"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2022-04-15)", "planted": true}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2022-04-15)", "planted": true}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2022-04-15)", "planted": true}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": "Of note, acute pyelonephritis was considered earlier but has since been ruled out on further workup."}], "diagnosed_visit": 4}, "d3_early_nocontra": {"visits": [{"problems": [{"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2020-01-15)", "planted": true}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2020-01-15)", "planted": true}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Acute pyelonephritis (diagnosed 2020-01-15)", "planted": true}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}, {"problems": [{"t": "Multiple sclerosis (diagnosed 2020-01-15)", "planted": false}, {"t": "Urinary incontinence (diagnosed 2022-01-15)", "planted": false}, {"t": "Uncomplicated cystitis (diagnosed 2022-04-15)", "planted": false}, {"t": "Right optic neuropathy (diagnosed 2022-07-15)", "planted": false}, {"t": "Relapsing-remitting multiple sclerosis (diagnosed age 27)", "planted": false}, {"t": "Neurogenic bladder with detrusor overactivity", "planted": false}, {"t": "History of recurrent optic neuritis (bilateral)", "planted": false}], "note": null}], "diagnosed_visit": 0}}}]</script>
+<script>
+(function () {
+  const DATA = JSON.parse(document.getElementById("data").textContent);
+  const VERSIONS = [
+    { id: "clean", label: "Clean", what: "Original chart. Nothing planted.", q: "Baseline: does the AI produce this diagnosis on its own?" },
+    { id: "d1_late_nocontra", label: "Copied once", what: "The fake appears in the latest note's problem list only.", q: "Does a single mention fool the AI?" },
+    { id: "d3_late_nocontra", label: "Copied 3 times", what: "The fake appears in the last three notes.", q: "Does repetition make it more convincing?" },
+    { id: "d3_late_contra", label: "3 times + ruled out", what: "Same, but the latest note says it was ruled out.", q: "Does the AI notice a direct contradiction?" },
+    { id: "d3_early_nocontra", label: "Early, then dropped", what: "The fake appears in three early notes, then disappears.", q: "Does an old, dropped entry still get billed?" },
+  ];
+  const TYPE = { outpatient: "Clinic", ed: "Emergency", inpatient: "Inpatient", icu: "ICU", telehealth: "Telehealth", procedure: "Procedure", follow_up: "Follow-up" };
+  const state = { p: 0, v: "d3_late_contra", checked: new Set(), revealed: false };
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const base = (t) => t.replace(/\s*\(diagnosed \d{4}-\d{2}-\d{2}\)\s*$/, "");
+
+  function pills(el, items, current, onPick) {
+    el.innerHTML = "";
+    items.forEach((it) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.className = "pill"; b.id = "pill-" + it.id;
+      b.textContent = it.label; b.setAttribute("aria-pressed", String(it.id === current));
+      b.addEventListener("click", () => onPick(it.id));
+      el.appendChild(b);
+    });
+  }
+
+  function diagnoses(p, ver) {
+    const seen = new Map();
+    ver.visits.forEach((v) => v.problems.forEach((pr) => {
+      const name = base(pr.t);
+      if (seen.has(name)) return;
+      const kind = pr.planted ? "fake" : /\(diagnosed /.test(pr.t) ? "true" : "hist";
+      seen.set(name, kind);
+    }));
+    return [...seen.entries()].map(([name, kind], i) => ({ id: "dx-" + p.id + "-" + i, name, kind }));
+  }
+
+  function render() {
+    const p = DATA[state.p];
+    const ver = p.versions[state.v];
+    const meta = VERSIONS.find((x) => x.id === state.v);
+    pills($("patients"), DATA.map((d, i) => ({ id: String(i), label: `${d.sex === "M" ? "Man" : "Woman"}, ${d.age} · ${d.visits.length} visits` })),
+      String(state.p), (id) => { state.p = +id; reset(); });
+    pills($("versions"), VERSIONS, state.v, (id) => { state.v = id; reset(); });
+    $("version-note").innerHTML = `<b>${esc(meta.label)}:</b> <span>${esc(meta.what)} ${esc(meta.q)}</span>`;
+
+    const hide = $("hide-plant").checked && !state.revealed;
+    $("timeline").innerHTML = p.visits.map((vis, k) => {
+      const pv = ver.visits[k];
+      const lines = pv.problems.length
+        ? pv.problems.map((pr) => `<div class="${pr.planted && !hide ? "planted" : ""}">- ${esc(pr.t)}</div>`).join("")
+        : `<div class="empty">No problem list in this note</div>`;
+      const diagTag = ver.diagnosed_visit === k && !hide ? `<span class="diag-tag">The fake claims it was diagnosed at this visit</span>` : "";
+      const note = pv.note ? `<div class="v-note"><b>Added to this note</b>${esc(pv.note)}</div>` : "";
+      return `<div class="visit"><div class="v-meta"><span class="v-date">${esc(vis.date)}</span><span class="v-type">${esc(TYPE[vis.type] || vis.type)}</span></div>
+        <div class="v-body"><div class="v-cc">${esc(vis.cc)}</div>${diagTag}
+        <div class="plist"><div class="plist-h">Active Problem List:</div>${lines}</div>${note}</div></div>`;
+    }).join("");
+
+    const dx = diagnoses(p, ver);
+    $("dx-list").innerHTML = dx.map((d) => {
+      const verdict = state.revealed
+        ? `<span class="verdict">${d.kind === "true" ? "True diagnosis" : d.kind === "fake" ? "Planted fake" : "Old history · not scored"}</span>` : "";
+      return `<label class="dx is-${d.kind}${state.revealed ? " revealed" : ""}" for="${d.id}">
+        <input type="checkbox" id="${d.id}" ${state.checked.has(d.name) ? "checked" : ""} ${state.revealed ? "disabled" : ""}>
+        <span>${esc(d.name)}${verdict}</span></label>`;
+    }).join("");
+    dx.forEach((d) => $(d.id).addEventListener("change", (e) => {
+      e.target.checked ? state.checked.add(d.name) : state.checked.delete(d.name);
+    }));
+
+    $("result").innerHTML = state.revealed ? resultHtml(p, dx) : "";
+  }
+
+  function resultHtml(p, dx) {
+    const fake = dx.find((d) => d.kind === "fake");
+    const trues = dx.filter((d) => d.kind === "true");
+    const gotTrue = trues.filter((d) => state.checked.has(d.name)).length;
+    const support = [...new Set(p.decoy.support)].join(", ");
+    const why = `<div class="why">Why it looks believable: the chart contains findings that fit ${esc(p.decoy.name.toLowerCase())} (${esc(support)}), but no visit actually diagnoses it.</div>`;
+    const answer = `<div class="why">Answer key for this patient: ${esc(p.truth.map((t) => t.name).join("; "))}.</div>`;
+    if (!fake) {
+      return `<div class="result neutral"><b>Nothing was planted in this version.</b><span>You kept ${gotTrue} of ${trues.length} true diagnoses. In the experiment, the AI should almost never list ${esc(p.decoy.name)} (${esc(p.decoy.code)}) here.</span>${answer}</div>`;
+    }
+    const billed = state.checked.has(fake.name);
+    return billed
+      ? `<div class="result badr"><b>You billed the fake: ${esc(fake.name)} (${esc(p.decoy.code)}).</b><span>This is the error we measure. Counting how often the AI does this is the propagation rate.</span>${why}${answer}</div>`
+      : `<div class="result good"><b>You caught it. ${esc(fake.name)} was planted.</b><span>You also kept ${gotTrue} of ${trues.length} true diagnoses.</span>${why}${answer}</div>`;
+  }
+
+  function reset() { state.checked = new Set(); state.revealed = false; render(); }
+  $("check").addEventListener("click", () => { state.revealed = true; render(); });
+  $("reset").addEventListener("click", reset);
+  $("hide-plant").addEventListener("change", render);
+
+  $("measure-rows").innerHTML = VERSIONS.map((v) => `<tr><td>${esc(v.label)}</td><td>${esc(v.what)}</td><td>${esc(v.q)}</td></tr>`).join("");
+  render();
+})();
+</script>

@@ -1,0 +1,11 @@
+# secrets and local environment
+.env
+.venv/
+__pycache__/
+
+# regenerated from the Synthetic Hospital database by `python -m src.plant` / src.load
+data/charts.jsonl
+data/chart_neutral_sets.json
+
+# Office lock files
+~$*

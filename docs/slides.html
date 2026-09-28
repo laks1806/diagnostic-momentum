@@ -1,0 +1,435 @@
+<title>Diagnostic Momentum Presentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap">
+<style>
+:root {
+  --bg: #E9EEED; --slide: #FFFFFF; --ink: #16232A; --muted: #56666D; --line: #D3DBDA;
+  --accent: #1D5C74; --accent-soft: #E3EEF2;
+  --plant-bg: #F8E08E; --plant-ink: #4F3B00; --plant-stroke: #B88A00;
+  --s1: #2a78d6; --s2: #eb6834; --s3: #1baf7a; --grid: #E1E0D9; --base: #C3C2B7;
+  --ok: #23714F; --ok-soft: #DFF1E7; --bad: #A8322A; --bad-soft: #F8E1DE;
+  --serif: "Newsreader", "Iowan Old Style", Georgia, serif;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0A1113; --slide: #142024; --ink: #E3EBEB; --muted: #98A9AE; --line: #2A3A3F;
+    --accent: #7FC1D9; --accent-soft: #1B3038; --plant-bg: #5A480F; --plant-ink: #FBE7A1; --plant-stroke: #E2B53A;
+    --s1: #3987e5; --s2: #d95926; --s3: #199e70; --grid: #2C2C2A; --base: #383835;
+    --ok: #74D1A0; --ok-soft: #173427; --bad: #F2948A; --bad-soft: #3A1C1A;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #0A1113; --slide: #142024; --ink: #E3EBEB; --muted: #98A9AE; --line: #2A3A3F;
+  --accent: #7FC1D9; --accent-soft: #1B3038; --plant-bg: #5A480F; --plant-ink: #FBE7A1; --plant-stroke: #E2B53A;
+  --s1: #3987e5; --s2: #d95926; --s3: #199e70; --grid: #2C2C2A; --base: #383835;
+  --ok: #74D1A0; --ok-soft: #173427; --bad: #F2948A; --bad-soft: #3A1C1A;
+}
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font: 400 20px/1.45 var(--sans); padding: 0 16px; margin: 0; overflow: hidden; }
+.viewport { position: fixed; left: 16px; right: 16px; top: calc(env(safe-area-inset-top, 0px) + 12px);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 60px); }
+.stage { width: 1280px; height: 720px; position: absolute; left: 50%; top: 50%; transform-origin: center center; }
+.slide { position: absolute; inset: 0; background: var(--slide); border: 1px solid var(--line); border-radius: 14px;
+  padding: 56px 72px 48px; display: grid; grid-template-rows: auto 1fr; gap: 22px; }
+.slide[hidden] { display: none !important; }
+.eyebrow { font: 500 14px/1 var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; }
+.eyebrow .num { font-family: var(--mono); letter-spacing: 0; }
+h1, h2 { font-family: var(--serif); font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -.01em; }
+h1 { font-size: 64px; line-height: 1.05; }
+h2 { font-size: 42px; line-height: 1.12; }
+p { margin: 0; }
+.head { display: grid; gap: 14px; align-content: start; }
+.body { min-height: 0; }
+.lede { font-size: 24px; color: var(--muted); max-width: 44ch; }
+strong { font-weight: 600; }
+mark { background: var(--plant-bg); color: var(--plant-ink); padding: 0 4px; border-radius: 3px; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; }
+.big { font-family: var(--serif); font-weight: 600; font-size: 72px; line-height: 1; }
+.small { font-size: 16px; color: var(--muted); }
+.list { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.list li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; }
+.list li::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); margin-top: 11px; }
+.card { border: 1px solid var(--line); border-radius: 10px; padding: 20px 22px; display: grid; gap: 8px; align-content: start; }
+.card .k { font-family: var(--serif); font-size: 44px; font-weight: 600; line-height: 1; }
+.card .d { font-size: 17px; color: var(--muted); }
+.card .src { font-size: 13px; color: var(--muted); font-family: var(--mono); }
+.grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.chart-wrap { display: grid; gap: 10px; }
+.chart-wrap svg { width: 100%; height: auto; display: block; }
+.legend { display: flex; gap: 22px; font-size: 16px; color: var(--muted); flex-wrap: wrap; }
+.legend span { display: inline-flex; align-items: center; gap: 8px; }
+.legend i { width: 14px; height: 14px; border-radius: 3px; display: inline-block; }
+.plist { font: 400 18px/1.7 var(--mono); border: 1px solid var(--line); border-radius: 10px; padding: 18px 22px; }
+.plist .h { font-weight: 500; }
+.plist .fake { background: var(--plant-bg); color: var(--plant-ink); border-radius: 3px; padding: 0 6px; margin-inline: -6px; }
+.note { border-left: 4px solid var(--plant-stroke); padding: 6px 0 6px 14px; font-size: 18px; }
+table { border-collapse: collapse; width: 100%; font-size: 19px; }
+th, td { text-align: left; padding: 10px 14px; border-top: 1px solid var(--line); }
+th { font: 500 13px var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); border-top: 0; }
+td.n { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.tag { font: 600 12px var(--sans); letter-spacing: .06em; text-transform: uppercase; border-radius: 999px; padding: 3px 10px; }
+.tag.prov { background: var(--plant-bg); color: var(--plant-ink); }
+.ot { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.ot .card h3 { margin: 0 0 4px; font: 600 16px var(--sans); letter-spacing: .08em; text-transform: uppercase; }
+.ot .opp h3 { color: var(--accent); } .ot .thr h3 { color: var(--bad); }
+.ot ul { margin: 0; padding-left: 20px; display: grid; gap: 8px; font-size: 18px; }
+.rec { display: grid; gap: 16px; counter-reset: rec; }
+.rec div { display: grid; grid-template-columns: 56px 1fr; gap: 16px; align-items: start; }
+.rec b.no { font-family: var(--serif); font-size: 40px; line-height: 1; color: var(--accent); }
+.rec p { font-size: 19px; color: var(--muted); } .rec p strong { color: var(--ink); display: block; font-size: 22px; margin-bottom: 2px; }
+.demo-steps { display: grid; gap: 12px; font-size: 20px; counter-reset: s; list-style: none; padding: 0; margin: 0; }
+.demo-steps li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; }
+.demo-steps li::before { content: counter(s); font-family: var(--mono); color: var(--accent); font-weight: 500; }
+/* diagram */
+.dg .box { fill: var(--slide); stroke: var(--line); stroke-width: 1.5; }
+.dg .box.key { stroke: var(--accent); } .dg .box.plant { stroke: var(--plant-stroke); stroke-width: 2.5; }
+.dg .t { font: 600 18px var(--sans); fill: var(--ink); } .dg .l { font: 400 15px var(--sans); fill: var(--muted); }
+.dg .e { stroke: var(--ink); stroke-width: 1.8; fill: none; } .dg .e.plant { stroke: var(--plant-stroke); stroke-width: 2.4; }
+.dg .e.key { stroke: var(--accent); stroke-dasharray: 6 5; }
+.dg .el { font: 500 14px var(--sans); fill: var(--muted); } .dg .el.plant { fill: var(--plant-stroke); } .dg .el.key { fill: var(--accent); }
+.dg .hi { fill: var(--ink); } .dg .hp { fill: var(--plant-stroke); } .dg .hk { fill: var(--accent); }
+/* chart svg */
+.ch .grid { stroke: var(--grid); stroke-width: 1; } .ch .base { stroke: var(--base); stroke-width: 1.5; }
+.ch .tick { font: 400 15px var(--sans); fill: var(--muted); } .ch .xl { font: 500 17px var(--sans); fill: var(--ink); }
+.ch .val { font: 600 18px var(--sans); fill: var(--ink); } .ch .ci { stroke: var(--muted); stroke-width: 1.5; }
+/* nav */
+.nav { position: fixed; left: 0; right: 0; bottom: 0; padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  display: flex; gap: 12px; align-items: center; justify-content: center; font: 500 14px var(--sans); color: var(--muted); }
+.nav button { font: 600 14px var(--sans); color: var(--ink); background: var(--slide); border: 1px solid var(--line); border-radius: 8px; padding: 7px 14px; cursor: pointer; }
+.nav button:hover { border-color: var(--accent); }
+.nav button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bar { position: fixed; left: 0; top: env(safe-area-inset-top, 0px); height: 3px; background: var(--accent); transition: width .2s; }
+.count { font-family: var(--mono); min-width: 64px; text-align: center; }
+@media (prefers-reduced-motion: reduce) { .bar { transition: none; } }
+</style>
+
+<div class="bar" id="bar"></div>
+<div class="viewport"><div class="stage" id="stage">
+
+<!-- 1 title -->
+<section class="slide" data-title="Title">
+  <div class="eyebrow"><span>Cotiviti intern assessment · Topic 2: Clinical decision making &amp; pattern recognition</span><span class="num"></span></div>
+  <div style="display:grid; align-content:center; gap:26px">
+    <h1>Diagnostic Momentum</h1>
+    <p class="lede" style="font-size:30px; max-width:30ch">Do AI medical coders copy a wrong diagnosis forward, and put it on the claim?</p>
+    <p class="small" style="font-size:18px">Lakshita Singh · September 2026 · Data: Synthetic Hospital v1.3 (Carnegie Mellon, 2026)</p>
+  </div>
+</section>
+
+<!-- 2 problem -->
+<section class="slide" data-title="The problem">
+  <div class="head"><div class="eyebrow"><span>The problem</span><span class="num"></span></div>
+    <h2>Charts copy their problem lists forward. Errors travel with them.</h2></div>
+  <div class="body two">
+    <div style="display:grid; gap:18px">
+      <p><strong>Diagnostic momentum:</strong> once a diagnosis is written into the chart, it gets repeated and trusted without being re-checked (Croskerry, 2003).</p>
+      <p>Copy-forward documentation spreads outdated or wrong entries from note to note (Hirschtick, 2006; Weis &amp; Levy, 2014).</p>
+      <p><strong>AI medical coders</strong> now read these charts and assign the ICD-10 codes that claims are paid on.</p>
+      <p style="color:var(--accent); font-weight:600">If the AI trusts the problem list, it bills the error.</p>
+    </div>
+    <div style="display:grid; gap:14px; align-content:start">
+      <div class="plist"><div class="h">Active Problem List:</div>
+        <div>- Obesity (diagnosed 2020-01-15)</div>
+        <div>- Hyperlipidemia (diagnosed 2020-07-15)</div>
+        <div class="fake">- Type 2 diabetes mellitus (diagnosed 2021-07-15)</div>
+        <div>- Hypertension</div></div>
+      <p class="small">A real pilot patient. The highlighted line was planted: nothing else in the chart diagnoses diabetes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 why now -->
+<section class="slide" data-title="Why now">
+  <div class="head"><div class="eyebrow"><span>Why now</span><span class="num"></span></div>
+    <h2>AI is entering coding from both sides of the claim</h2></div>
+  <div class="body grid4">
+    <div class="card"><span class="k">+12–20</span><span class="d">percentage points more new-patient visits billed at the top levels after hospitals adopted AI scribes</span><span class="src">Patton et al., 2026</span></div>
+    <div class="card"><span class="k">Arms race</span><span class="d">Provider-side AI raises coding intensity; payers answer with their own AI</span><span class="src">Dai et al., 2025; Nong &amp; Neprash, 2026</span></div>
+    <div class="card"><span class="k">Jan 2026</span><span class="d">CMS WISeR: AI-assisted prior authorization, with human review of denials</span><span class="src">CMS</span></div>
+    <div class="card"><span class="k">Accept it</span><span class="d">LLMs take false medical evidence at face value and struggle to spot errors in paired notes</span><span class="src">Mo et al., 2026; Zhang &amp; Beheshti, 2026</span></div>
+  </div>
+</section>
+
+<!-- 4 dataset -->
+<section class="slide" data-title="Dataset">
+  <div class="head"><div class="eyebrow"><span>The dataset</span><span class="num"></span></div>
+    <h2>Synthetic Hospital: realistic charts with a verified answer key</h2></div>
+  <div class="body two">
+    <div class="grid3" style="grid-template-columns:1fr 1fr; gap:16px">
+      <div class="card"><span class="k">1,268</span><span class="d">synthetic patients</span></div>
+      <div class="card"><span class="k">5,602</span><span class="d">visits, ~4.4 per patient</span></div>
+      <div class="card"><span class="k">53%</span><span class="d">physicians' accuracy telling synthetic charts from real ones (chance is 50%)</span></div>
+      <div class="card"><span class="k">0</span><span class="d">real patients, so it is shareable and every diagnosis is verified</span></div>
+    </div>
+    <div style="display:grid; gap:18px">
+      <p>Released <strong>September 2026</strong> by Carnegie Mellon (Park, Chen &amp; Dettmers). Each diagnosis is grounded in ICD-10-CM, SNOMED CT and LOINC, with a knowledge graph of findings.</p>
+      <p>Real charts can't show whether a copied diagnosis is wrong. Here we know, so we can plant an error and measure what the AI does with it.</p>
+      <p class="note">The authors' stated gap: the benchmark "does not explicitly simulate documentation errors." This project adds that layer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 pipeline -->
+<section class="slide" data-title="Method">
+  <div class="head"><div class="eyebrow"><span>Method</span><span class="num"></span></div>
+    <h2>Plant one believable fake per patient, then watch the AI</h2></div>
+  <div class="body">
+    <svg class="dg" viewBox="0 0 1136 420" role="img" aria-label="Pipeline: Synthetic Hospital, pick a fake diagnosis, plant it, AI coder, scorer, results. The answer key and the identity of the fake go straight to the scorer; the AI never sees them.">
+      <defs>
+        <marker id="m-i" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hi" d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="m-p" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hp" d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="m-k" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="hk" d="M0,0 L10,5 L0,10 z"/></marker>
+      </defs>
+      <rect class="box key" x="8" y="10" width="300" height="140" rx="10"/>
+      <text class="t" x="28" y="48">Synthetic Hospital</text>
+      <text class="l" x="28" y="78">50 patients with 5+ visits</text>
+      <text class="l" x="28" y="102">Knowledge graph of findings</text>
+      <text class="l" x="28" y="126">Answer key: true diagnoses</text>
+      <rect class="box plant" x="418" y="10" width="300" height="140" rx="10"/>
+      <text class="t" x="438" y="48">Pick a fake diagnosis</text>
+      <text class="l" x="438" y="78">A tempting wrong exam answer</text>
+      <text class="l" x="438" y="102">≥ 2 matching findings in chart</text>
+      <text class="l" x="438" y="126">Fits the patient's age and sex</text>
+      <rect class="box plant" x="828" y="10" width="300" height="140" rx="10"/>
+      <text class="t" x="848" y="48">Plant it</text>
+      <text class="l" x="848" y="78">One line in the problem list</text>
+      <text class="l" x="848" y="102">5 versions of every chart</text>
+      <text class="l" x="848" y="126">Nothing else changes</text>
+      <line class="e" x1="308" y1="80" x2="412" y2="80" marker-end="url(#m-i)"/>
+      <line class="e plant" x1="718" y1="80" x2="822" y2="80" marker-end="url(#m-p)"/>
+      <text class="el plant" x="770" y="68" text-anchor="middle">1 fake each</text>
+      <line class="e" x1="978" y1="150" x2="978" y2="264" marker-end="url(#m-i)"/>
+      <text class="el" x="990" y="212">250 charts</text>
+      <polyline class="e key" points="158,150 158,210 520,210 520,264" marker-end="url(#m-k)"/>
+      <text class="el key" x="340" y="200" text-anchor="middle">answer key</text>
+      <line class="e plant" x1="640" y1="150" x2="640" y2="264" stroke-dasharray="6 5" marker-end="url(#m-p)"/>
+      <text class="el plant" x="652" y="200">which one is fake</text>
+      <rect class="box" x="828" y="270" width="300" height="140" rx="10"/>
+      <text class="t" x="848" y="308">AI coder</text>
+      <text class="l" x="848" y="338">S1: the benchmark's prompt</text>
+      <text class="l" x="848" y="362">S2: + "lists may be wrong"</text>
+      <text class="l" x="848" y="386">S3: + evidence auditor</text>
+      <rect class="box" x="418" y="270" width="300" height="140" rx="10"/>
+      <text class="t" x="438" y="308">Scorer</text>
+      <text class="l" x="438" y="338">Accuracy vs the answer key</text>
+      <text class="l" x="438" y="362">Did the fake get coded?</text>
+      <text class="l" x="438" y="386">Paired tests, same patients</text>
+      <rect class="box" x="8" y="270" width="300" height="140" rx="10"/>
+      <text class="t" x="28" y="308">Results</text>
+      <text class="l" x="28" y="338">gpt-oss-120b: 500 calls</text>
+      <text class="l" x="28" y="362">Gemini Flash-Lite × 2</text>
+      <text class="l" x="28" y="386">Total cost: $1.15</text>
+      <line class="e" x1="828" y1="340" x2="724" y2="340" marker-end="url(#m-i)"/>
+      <text class="el" x="776" y="328" text-anchor="middle">codes</text>
+      <line class="e" x1="418" y1="340" x2="314" y2="340" marker-end="url(#m-i)"/>
+      <text class="el" x="366" y="328" text-anchor="middle">scores</text>
+    </svg>
+  </div>
+</section>
+
+<!-- 6 versions -->
+<section class="slide" data-title="Five versions">
+  <div class="head"><div class="eyebrow"><span>Design</span><span class="num"></span></div>
+    <h2>Every patient, five versions. Only the fake line moves.</h2></div>
+  <div class="body">
+    <table>
+      <thead><tr><th>Version</th><th>What changes in the chart</th><th>Question it answers</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Clean</strong></td><td>Nothing planted</td><td>Does the AI produce the fake on its own?</td></tr>
+        <tr><td><strong>Copied once</strong></td><td><mark>Fake</mark> in the latest note's problem list</td><td>Is one copy enough to fool it?</td></tr>
+        <tr><td><strong>Copied 3×</strong></td><td><mark>Fake</mark> in the last three notes</td><td>Does repetition make it more convincing?</td></tr>
+        <tr><td><strong>3× + ruled out</strong></td><td>Same, plus "…has since been ruled out on further workup"</td><td>Does the AI notice a direct contradiction?</td></tr>
+        <tr><td><strong>Early, then dropped</strong></td><td><mark>Fake</mark> in three early notes, then gone</td><td>Does an old, dropped entry still get coded?</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 7 result 1 -->
+<section class="slide" data-title="Result 1">
+  <div class="head"><div class="eyebrow"><span>Result 1 · gpt-oss-120b · 50 patients</span><span class="num"></span></div>
+    <h2>One copied line is enough: the AI codes the fake 90% of the time</h2></div>
+  <div class="body chart-wrap">
+    <svg class="ch" id="chart1" viewBox="0 0 1136 400" role="img" aria-label="Share of charts where the AI coded the planted fake: clean 2%, copied once 90%, copied three times 92%, three times plus ruled out 48%, early then dropped 80%."></svg>
+    <p class="small">Share of charts where the AI coded the planted fake (S1, the benchmark's own prompt). Whiskers: 95% confidence intervals. Clean vs planted: paired McNemar p &lt; 0.001.</p>
+  </div>
+</section>
+
+<!-- 8 result 2 -->
+<section class="slide" data-title="Result 2">
+  <div class="head"><div class="eyebrow"><span>Result 2 · the fixes</span><span class="num"></span></div>
+    <h2>A warning helps a little. An evidence auditor cuts errors from 92% to 20%.</h2></div>
+  <div class="body two" style="grid-template-columns: 1.4fr 1fr">
+    <div class="chart-wrap">
+      <div class="legend"><span><i style="background:var(--s1)"></i>S1 · benchmark prompt</span><span><i style="background:var(--s2)"></i>S2 · + "lists may be wrong"</span><span><i style="background:var(--s3)"></i>S3 · + evidence auditor</span></div>
+      <svg class="ch" id="chart2" viewBox="0 0 700 400" role="img" aria-label="Copied three times: S1 92%, S2 58%, S3 20%. Three times plus ruled out: S1 48%, S2 22%, S3 12%."></svg>
+    </div>
+    <div style="display:grid; gap:18px; align-content:start">
+      <p><strong>S3 adds one step:</strong> a second call checks every code and keeps it only if it can quote evidence from the visit notes. Problem-list lines alone don't count.</p>
+      <p>Accuracy on the true diagnoses is unchanged on planted charts (0.53 → 0.55) and dips slightly on clean ones (0.59 → 0.57).</p>
+      <p>Cost of the auditor: <strong>about $0.002 per chart.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 9 across models -->
+<section class="slide" data-title="Across models">
+  <div class="head"><div class="eyebrow"><span>Result 3 · across model families</span><span class="num"></span></div>
+    <h2>Every model is fooled. They differ on contradictions.</h2></div>
+  <div class="body two" style="grid-template-columns: 1.3fr 1fr">
+    <table>
+      <thead><tr><th>Version (S1)</th><th>gpt-oss-120b</th><th>Gemini 3.1 Flash-Lite</th><th>Gemini 3.5 Flash-Lite</th></tr></thead>
+      <tbody>
+        <tr><td>Clean</td><td class="n">2%</td><td class="n">2%</td><td class="n">0%</td></tr>
+        <tr><td>Copied once</td><td class="n">90%</td><td class="n">46%</td><td class="n">54%</td></tr>
+        <tr><td>Copied 3×</td><td class="n">92%</td><td class="n">48%</td><td class="n">61%</td></tr>
+        <tr><td>3× + ruled out</td><td class="n"><strong>48%</strong></td><td class="n"><strong>2%</strong></td><td class="n"><strong>4%</strong></td></tr>
+        <tr><td>Early, then dropped</td><td class="n">80%</td><td class="n">37%</td><td class="n">51%</td></tr>
+      </tbody>
+    </table>
+    <div style="display:grid; gap:18px; align-content:start">
+      <span class="tag prov" style="justify-self:start">Gemini numbers provisional</span>
+      <p>The effect appears in models from two companies: near zero on clean charts, roughly half to nine in ten once the fake is copied in.</p>
+      <p>Gemini respects "ruled out"; gpt-oss ignores it half the time. <strong>Each AI tool has its own blind spots, so each needs its own stress test.</strong></p>
+    </div>
+  </div>
+</section>
+
+<!-- 10 demo -->
+<section class="slide" data-title="Demo">
+  <div class="head"><div class="eyebrow"><span>Live demo</span><span class="num"></span></div>
+    <h2>See it on one patient</h2></div>
+  <div class="body two">
+    <ol class="demo-steps">
+      <li><span>Results tab: the headline numbers</span></li>
+      <li><span>Patient #1992, "Copied 3×": the <mark>fake</mark> in the problem list</span></li>
+      <li><span>The AI coder codes it, tagged <em>Planted fake</em></span></li>
+      <li><span>"3× + ruled out": it still codes it</span></li>
+      <li><span>The evidence auditor drops the fake, keeps every true diagnosis with a quote, accuracy 1.00</span></li>
+    </ol>
+    <div class="card" style="align-self:start"><span class="d">Run locally</span><span style="font:500 18px var(--mono)">streamlit run app.py</span><span class="d">Reads saved results only. No API calls, no cost.</span></div>
+  </div>
+</section>
+
+<!-- 11 opportunities / threats -->
+<section class="slide" data-title="Opportunities and threats">
+  <div class="head"><div class="eyebrow"><span>For Cotiviti</span><span class="num"></span></div>
+    <h2>Opportunities and threats</h2></div>
+  <div class="body ot">
+    <div class="card opp"><h3>Opportunities</h3><ul>
+      <li><strong>Evidence-cited chart review at scale:</strong> every code backed by a quote</li>
+      <li><strong>Cheap, verifiable model testing:</strong> this whole study cost $1.15</li>
+      <li><strong>Operations triage:</strong> route problem-list-only codes to human reviewers first</li>
+    </ul></div>
+    <div class="card thr"><h3>Threats</h3><ul>
+      <li><strong>Automated overpayment:</strong> copy-forward errors become coded claims</li>
+      <li><strong>False confidence:</strong> prompt warnings leave most errors in place</li>
+      <li><strong>Provider abrasion:</strong> over-strict auditors could deny true diagnoses</li>
+      <li><strong>Synthetic-to-real gap:</strong> results need confirming on real records</li>
+    </ul></div>
+  </div>
+</section>
+
+<!-- 12 recommendations -->
+<section class="slide" data-title="Recommendations">
+  <div class="head"><div class="eyebrow"><span>Recommendations</span><span class="num"></span></div>
+    <h2>Three moves for Cotiviti</h2></div>
+  <div class="body rec">
+    <div><b class="no">1</b><p><strong>Adopt an evidence-first standard for AI coding and review</strong>Every AI-generated or AI-reviewed code cites encounter-level evidence; problem-list-only codes go to a human. Pilot in clinical chart validation.</p></div>
+    <div><b class="no">2</b><p><strong>Make planted-error stress tests a release gate</strong>Test every coding or audit model, vendor or in-house, on paired clean and planted charts. Report propagation, not just accuracy.</p></div>
+    <div><b class="no">3</b><p><strong>Take a position in the coding arms race</strong>Publish a payer-side documentation-evidence standard and partner with benchmark groups to extend tests to documentation errors.</p></div>
+    <p class="small" style="grid-column:1/-1">Code, data and full results in the GitHub repository. References in the written report.</p>
+  </div>
+</section>
+
+</div></div>
+
+<nav class="nav" aria-label="Slide navigation">
+  <button type="button" id="prev" aria-label="Previous slide">← Prev</button>
+  <span class="count" id="count">1 / 12</span>
+  <button type="button" id="next" aria-label="Next slide">Next →</button>
+  <button type="button" id="full" aria-label="Full screen">Full screen</button>
+</nav>
+
+<script>
+(function () {
+  const slides = [...document.querySelectorAll(".slide")];
+  const stage = document.getElementById("stage");
+  let i = 0;
+  try { const h = parseInt(location.hash.slice(1), 10); if (h >= 1 && h <= slides.length) i = h - 1; } catch (e) {}
+  slides.forEach((s, k) => { const n = s.querySelector(".num"); if (n) n.textContent = `${k + 1} / ${slides.length}`; });
+
+  function fit() {
+    const box = stage.parentElement.getBoundingClientRect();
+    stage.style.transform = `translate(-50%, -50%) scale(${Math.min(box.width / 1280, box.height / 720)})`;
+  }
+  function show(k) {
+    i = Math.max(0, Math.min(slides.length - 1, k));
+    slides.forEach((s, n) => { s.hidden = n !== i; });
+    document.getElementById("count").textContent = `${i + 1} / ${slides.length}`;
+    document.getElementById("bar").style.width = `${((i + 1) / slides.length) * 100}%`;
+    try { history.replaceState(null, "", `#${i + 1}`); } catch (e) {}
+  }
+  document.getElementById("prev").onclick = () => show(i - 1);
+  document.getElementById("next").onclick = () => show(i + 1);
+  document.getElementById("full").onclick = () => { document.documentElement.requestFullscreen?.().catch(() => {}); };
+  document.addEventListener("keydown", (e) => {
+    if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); show(i + 1); }
+    if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); show(i - 1); }
+    if (e.key === "Home") show(0);
+    if (e.key === "End") show(slides.length - 1);
+  });
+  window.addEventListener("resize", fit);
+
+  // Bar charts drawn to scale from the saved results (results/summary.md, gpt-oss-120b).
+  const NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent, text) {
+    const n = document.createElementNS(NS, tag);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    if (text != null) n.textContent = text;
+    parent.appendChild(n); return n;
+  }
+  function bars(svg, W, H, groups, series) {
+    const L = 64, R = 10, T = 36, B = 44, ph = H - T - B, pw = W - L - R;
+    const y = (v) => T + ph * (1 - v / 100);
+    [0, 25, 50, 75, 100].forEach((t) => {
+      el("line", { class: t ? "grid" : "base", x1: L, x2: W - R, y1: y(t), y2: y(t) }, svg);
+      el("text", { class: "tick", x: L - 10, y: y(t) + 5, "text-anchor": "end" }, svg, `${t}%`);
+    });
+    const gw = pw / groups.length, bw = Math.min(64, (gw * 0.72) / series.length);
+    groups.forEach((g, gi) => {
+      const cx = L + gw * (gi + 0.5);
+      el("text", { class: "xl", x: cx, y: H - 12, "text-anchor": "middle" }, svg, g.label);
+      const present = series.filter((s) => g.v[s.key] != null);
+      present.forEach((s, si) => {
+        const [v, lo, hi] = g.v[s.key];
+        const x = cx + (si - (present.length - 1) / 2) * (bw + 6) - bw / 2;
+        const top = y(v), r = Math.min(4, (y(0) - top) / 2);
+        if (v > 0) el("path", { d: `M${x},${y(0)} V${top + r} Q${x},${top} ${x + r},${top} H${x + bw - r} Q${x + bw},${top} ${x + bw},${top + r} V${y(0)} Z`, style: `fill: var(${s.color})` }, svg);
+        el("line", { class: "ci", x1: x + bw / 2, x2: x + bw / 2, y1: y(lo), y2: y(hi) }, svg);
+        el("text", { class: "val", x: x + bw / 2, y: y(hi) - 8, "text-anchor": "middle" }, svg, `${v}%`);
+      });
+    });
+  }
+  bars(document.getElementById("chart1"), 1136, 400, [
+    { label: "Clean", v: { s1: [2, 0, 10] } },
+    { label: "Copied once", v: { s1: [90, 79, 96] } },
+    { label: "Copied 3×", v: { s1: [92, 81, 97] } },
+    { label: "3× + ruled out", v: { s1: [48, 35, 61] } },
+    { label: "Early, then dropped", v: { s1: [80, 67, 89] } },
+  ], [{ key: "s1", color: "--s1" }]);
+  bars(document.getElementById("chart2"), 700, 400, [
+    { label: "Copied 3×", v: { s1: [92, 81, 97], s2: [58, 44, 71], s3: [20, 11, 33] } },
+    { label: "3× + ruled out", v: { s1: [48, 35, 61], s2: [22, 13, 35], s3: [12, 6, 24] } },
+  ], [{ key: "s1", color: "--s1" }, { key: "s2", color: "--s2" }, { key: "s3", color: "--s3" }]);
+
+  fit(); show(i);
+})();
+</script>
